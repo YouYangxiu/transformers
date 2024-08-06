@@ -1094,7 +1094,7 @@ class Qwen2ForCausalLM(Qwen2PreTrainedModel):
         "Hey, are you conscious? Can you talk to me?\nI'm not conscious, but I can talk to you."
         ```"""
 
-        print(f"attention_mask====================>>>>{attention_mask}")
+        print(f"attention_mask====================>>>>{attention_mask.cpu().numpy}")
 
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         output_hidden_states = (
