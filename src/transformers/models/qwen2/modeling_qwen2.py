@@ -289,6 +289,9 @@ class Qwen2Attention(nn.Module):
         use_cache: bool = False,
         cache_position: Optional[torch.LongTensor] = None,
     ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
+
+        print(f"this is attention mask from class Qwen2Attention {attention_mask}")
+
         bsz, q_len, _ = hidden_states.size()
 
         query_states = self.q_proj(hidden_states)
@@ -381,6 +384,7 @@ class Qwen2FlashAttention2(Qwen2Attention):
         use_cache: bool = False,
         cache_position: Optional[torch.LongTensor] = None,
     ):
+        print(f"this is attention mask from class Qwen2FlashAttention2 {attention_mask}")
         bsz, q_len, _ = hidden_states.size()
 
         query_states = self.q_proj(hidden_states)
@@ -522,6 +526,7 @@ class Qwen2SdpaAttention(Qwen2Attention):
         use_cache: bool = False,
         cache_position: Optional[torch.LongTensor] = None,
     ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
+        print(f"this is attention mask from class Qwen2SdpaAttention {attention_mask}")
         if output_attentions:
             # TODO: Improve this warning with e.g. `model.config.attn_implementation = "manual"` once this is implemented.
             logger.warning_once(
