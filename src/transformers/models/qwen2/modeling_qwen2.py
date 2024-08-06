@@ -27,6 +27,7 @@ import torch.utils.checkpoint
 from torch import nn
 from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
 
+from examples.research_projects.lxmert.extracting_data import CONFIG
 from ...activations import ACT2FN
 from ...cache_utils import Cache, DynamicCache, StaticCache
 from ...modeling_attn_mask_utils import AttentionMaskConverter
@@ -815,6 +816,7 @@ class Qwen2Model(Qwen2PreTrainedModel):
     """
 
     def __init__(self, config: Qwen2Config):
+        print('aaaaaaaaaaaaaaaaaaaaaaaaaa',config._attn_implementation)
         super().__init__(config)
         self.padding_idx = config.pad_token_id
         self.vocab_size = config.vocab_size
@@ -1031,7 +1033,6 @@ class Qwen2ForCausalLM(Qwen2PreTrainedModel):
     _tied_weights_keys = ["lm_head.weight"]
 
     def __init__(self, config):
-        print("configaaaaaaaaaaaaaaaaaaaaaaaaa",config)
         super().__init__(config)
         self.model = Qwen2Model(config)
         self.vocab_size = config.vocab_size
