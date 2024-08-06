@@ -290,7 +290,8 @@ class Qwen2Attention(nn.Module):
         cache_position: Optional[torch.LongTensor] = None,
     ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
 
-        print(f"this is attention mask from class Qwen2Attention {attention_mask}")
+        if torch.cuda.current_device() == 0:
+            print(f"this is attention mask from class Qwen2Attention {attention_mask}")
 
         bsz, q_len, _ = hidden_states.size()
 
@@ -1100,7 +1101,7 @@ class Qwen2ForCausalLM(Qwen2PreTrainedModel):
         "Hey, are you conscious? Can you talk to me?\nI'm not conscious, but I can talk to you."
         ```"""
 
-        print(f"attention_mask====================>>>>{attention_mask.cpu().numpy()}")
+        # print(f"attention_mask====================>>>>{attention_mask.cpu().numpy()}")
 
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         output_hidden_states = (
