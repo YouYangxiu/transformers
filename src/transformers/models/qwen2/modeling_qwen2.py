@@ -290,7 +290,7 @@ class Qwen2Attention(nn.Module):
         cache_position: Optional[torch.LongTensor] = None,
     ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
 
-        if torch.cuda.current_device() == 0:
+        if torch.cuda.current_device() == "0":
             print(f"this is attention mask from class Qwen2Attention {attention_mask}")
 
         bsz, q_len, _ = hidden_states.size()
