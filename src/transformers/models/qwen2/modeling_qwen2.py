@@ -1031,6 +1031,7 @@ class Qwen2ForCausalLM(Qwen2PreTrainedModel):
     _tied_weights_keys = ["lm_head.weight"]
 
     def __init__(self, config):
+        print("configaaaaaaaaaaaaaaaaaaaaaaaaa",config)
         super().__init__(config)
         self.model = Qwen2Model(config)
         self.vocab_size = config.vocab_size
