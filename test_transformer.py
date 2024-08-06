@@ -6,6 +6,9 @@
 """
 import transformers
 from transformers import AutoModelForCausalLM, AutoTokenizer
+import os
+# 设置只使用 GPU 0
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 device = "cuda" # the device to load the model onto
 transformers.logging.set_verbosity_error()
 
