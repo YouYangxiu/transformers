@@ -7,9 +7,10 @@
 import transformers
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import os
-# 设置只使用 GPU 0
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-device = "cuda:0" # the device to load the model onto
+
+
+# 设置只使用 GPU 0
 transformers.logging.set_verbosity_error()
 
 
@@ -22,7 +23,7 @@ messages = [{"role": "user", "content": prompt}]
 
 text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 
-model_inputs = tokenizer([text], return_tensors="pt").to(device)
+model_inputs = tokenizer([text], return_tensors="pt")
 
 generated_ids = model.generate(model_inputs.input_ids, max_new_tokens=100, do_sample=False, top_p=None)
 
