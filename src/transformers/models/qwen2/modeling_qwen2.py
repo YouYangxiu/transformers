@@ -291,7 +291,7 @@ class Qwen2Attention(nn.Module):
     ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
 
 
-        print(self.layer_idx)
+        print(f"layer_idx...{self.layer_idx}")
         if self.layer_idx == 0:
             print(f"this is attention mask from class Qwen2Attention {attention_mask}")
 
