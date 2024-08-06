@@ -279,6 +279,8 @@ class Qwen2Attention(nn.Module):
             base=self.rope_theta,
         )
 
+        self.first_compute = True
+
     def forward(
         self,
         hidden_states: torch.Tensor,
@@ -290,9 +292,19 @@ class Qwen2Attention(nn.Module):
         cache_position: Optional[torch.LongTensor] = None,
     ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
 
+        import os
+        prompt_len = os.environ.get('prompt_len')
+        query1_len = os.environ.get('query1_len')
+        query2_len = os.environ.get('query1_len')
+
+
 
         if self.layer_idx == 0:
-            print(f"this is attention mask from class Qwen2Attention {attention_mask}")
+            print(f"this is attention mask from class Qwen2Attention {attention_mask[:,:]}")
+
+        if self.first_compute:
+
+
 
         bsz, q_len, _ = hidden_states.size()
 

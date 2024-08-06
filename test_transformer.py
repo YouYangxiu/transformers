@@ -25,7 +25,7 @@ text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_pr
 
 model_inputs = tokenizer([text], return_tensors="pt")
 
-generated_ids = model.generate(model_inputs.input_ids, max_new_tokens=100, do_sample=False, top_p=None)
+generated_ids = model.generate(model_inputs.input_ids, max_new_tokens=1000, do_sample=False, top_p=None)
 
 generated_ids = [output_ids[len(input_ids):] for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)]
 
