@@ -293,9 +293,9 @@ class Qwen2Attention(nn.Module):
     ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
 
         import os
-        prompt_len = os.environ.get('prompt_len')
-        query1_len = os.environ.get('query1_len')
-        query2_len = os.environ.get('query1_len')
+        # prompt_len = os.environ.get('prompt_len')
+        # query1_len = os.environ.get('query1_len')
+        # query2_len = os.environ.get('query1_len')
 
 
 
