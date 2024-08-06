@@ -290,7 +290,8 @@ class Qwen2Attention(nn.Module):
         cache_position: Optional[torch.LongTensor] = None,
     ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
 
-        if torch.cuda.current_device() == 0:
+
+        if self.layer_idx == 0:
             print(f"this is attention mask from class Qwen2Attention {attention_mask}")
 
         bsz, q_len, _ = hidden_states.size()
@@ -1037,6 +1038,11 @@ class Qwen2ForCausalLM(Qwen2PreTrainedModel):
         self.model = Qwen2Model(config)
         self.vocab_size = config.vocab_size
         self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=False)
+        # i = 0
+        # for n, m in self.named_modules():
+        #     if isinstance(m, Qwen2Attention):
+        #         m.layer_index = i
+        #         i += 1
 
         # Initialize weights and apply final processing
         self.post_init()
