@@ -815,7 +815,7 @@ class Qwen2Model(Qwen2PreTrainedModel):
     """
 
     def __init__(self, config: Qwen2Config):
-        print('aaaaaaaaaaaaaaaaaaaaaaaaaa',config._attn_implementation)
+        config._attn_implementation = "eager"
         super().__init__(config)
         self.padding_idx = config.pad_token_id
         self.vocab_size = config.vocab_size
