@@ -33,7 +33,7 @@ tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen2-7B-Instruct")
 prompt = """你是一名严谨的个人助手。请帮我回答如下问题：
 以下是我的考试成绩，请帮我计算我的总分。"""
 q1 = "我的语文是 100 分。"
-q2 = "我的数学是 20 分。"
+q2 = "我的数学是 200 分。"
 # q3 = """我的英语是 70 分。
 # 请回答：
 # """
