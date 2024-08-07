@@ -24,11 +24,11 @@ tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen2-7B-Instruct")
 # q2 = """essay 1: The Braille system also had important cultural effects beyond the sphere of written culture. Its invention later led to the development of a music notation system for the blind, although Louis Braille did not develop this system himself (Jimenez, et al., 2009). This development helped remove a cultural obstacle that had been introduced by the popularization of written musical notation in the early 1500s. While music had previously been an arena in which the blind could participate on equal footing, the transition from memory-based performance to notation-based performance meant that blind musicians were no longer able to compete with sighted musicians (Kersten, 1997). As a result, a tactile musical notation system became necessary for professional equality between blind and sighted musicians (Kersten, 1997). \n"""
 # q3 = """essay 2: Lennon wrote, or co-wrote some of the most memorable tunes ever written in the Rock 'n' Roll genre. He found great success as a member of the Beatles, which is the most commercially successful group in history, and as a solo artist. Lennon was also a political activist. His views on religion and politics caused a great deal of controversy in the United States. He was an outspoken critic of the country's involvement in the Vietnam conflict. His popularity caused great concern with government officials because he had the attention of the young people in America at the time."""
 
-prompt = "test "
+prompt = "test"
 
-q1 = "I am "
+q1 = "I am"
 
-q2 = "a helpful "
+q2 = "a helpful"
 
 q3 = "assistant."
 
@@ -41,14 +41,14 @@ query1_len = len(tokenizer(q1)["input_ids"])
 query2_len = len(tokenizer(q2)["input_ids"])
 query3_len = len(tokenizer(q3)["input_ids"])
 
-print(f"{prompt_len}, {query1_len}, {query2_len}, {query3_len}")
+# print(f"{prompt_len}, {query1_len}, {query2_len}, {query3_len}")
 
 os.environ["text_len"] = str(prompt_len + query1_len + query2_len + query3_len)
 os.environ["query1_len"] = str(query1_len)
 os.environ["query2_len"] = str(query2_len)
 os.environ["query3_len"] = str(query3_len)
 
-model_inputs = tokenizer([prompt + q1 + q2 + q3], return_tensors="pt").to("cuda:0")
+model_inputs = tokenizer([prompt + " " + q1 + " "+ q2 + " " + q3], return_tensors="pt").to("cuda:0")
 
 generated_ids = model.generate(model_inputs.input_ids, max_new_tokens=1000, do_sample=False, top_p=None)
 
