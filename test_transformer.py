@@ -41,6 +41,7 @@ query1_len = len(tokenizer(q1)["input_ids"])
 query2_len = len(tokenizer(q2)["input_ids"])
 query3_len = len(tokenizer(q3)["input_ids"])
 
+print(f"{prompt_len}, {query1_len}, {query2_len}, {query3_len}")
 
 os.environ["text_len"] = str(prompt_len + query1_len + query2_len + query3_len)
 os.environ["query1_len"] = str(query1_len)
