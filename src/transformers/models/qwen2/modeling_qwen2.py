@@ -246,6 +246,8 @@ class Qwen2Attention(nn.Module):
         super().__init__()
         self.config = config
         self.layer_idx = layer_idx
+
+
         if layer_idx is None:
             logger.warning_once(
                 f"Instantiating {self.__class__.__name__} without passing `layer_idx` is not recommended and will "
@@ -279,7 +281,7 @@ class Qwen2Attention(nn.Module):
             base=self.rope_theta,
         )
 
-        self.first_compute = True
+        self.first_compute_dict = {self.layer_idx:True}
 
     def forward(
         self,
@@ -293,14 +295,16 @@ class Qwen2Attention(nn.Module):
     ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
 
         import os
-        # prompt_len = os.environ.get('prompt_len')
-        # query1_len = os.environ.get('query1_len')
-        # query2_len = os.environ.get('query1_len')
+        prompt_len = os.environ.get('text_len')
+        query1_len = os.environ.get('query1_len')
+        query2_len = os.environ.get('query1_len')
 
 
-
-        if self.layer_idx == 0:
-            print(f"this is attention mask from class Qwen2Attention {attention_mask.shape}")
+        if self.first_compute_dict[self.layer_idx]:
+            self.first_compute_dict[self.layer_idx] = False
+            print(f"{self.layer_idx}=====>{attention_mask}")
+        # if self.layer_idx == 0:
+        #     print(f"this is attention mask from class Qwen2Attention {attention_mask.shape}")
 
         # if self.first_compute:
 
