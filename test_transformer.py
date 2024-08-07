@@ -25,10 +25,20 @@ tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen2-7B-Instruct")
 # q3 = """essay 2: Lennon wrote, or co-wrote some of the most memorable tunes ever written in the Rock 'n' Roll genre. He found great success as a member of the Beatles, which is the most commercially successful group in history, and as a solo artist. Lennon was also a political activist. His views on religion and politics caused a great deal of controversy in the United States. He was an outspoken critic of the country's involvement in the Vietnam conflict. His popularity caused great concern with government officials because he had the attention of the young people in America at the time."""
 
 
-prompt = "请告诉我，我的考试总分是多少分？"
-q1 = "我的语文是20分"
-q2 = "我的数学是80分"
-q3 = "我的英语是100分"
+# prompt = "请告诉我，我的考试总分是多少分？"
+# q1 = "我的语文是20分"
+# q2 = "我的数学是80分"
+# q3 = "我的英语是100分"
+
+prompt = """你是一名严谨的个人助手。请帮我回答如下问题：
+以下是我的考试成绩，请帮我计算我的总分。"""
+q1 = "我的语文是 100 分。"
+q2 = "我的中文是 20 分。"
+q3 = """我的英语是 70 分。
+请回答：
+"""
+
+
 # prompt = "Tell me my sum score"
 # q1 = "my chinese score is 100"
 # q2 = "my math score is 20"
