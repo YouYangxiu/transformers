@@ -307,11 +307,11 @@ class Qwen2Attention(nn.Module):
                 # print(f"{self.layer_idx}=====>{attention_mask.shape}")
                 for i in range(prompt_len + query1_len, prompt_len + query1_len + query2_len):
                     for j in range(prompt_len, prompt_len + query1_len):
-                        attention_mask[0][0][i - 1][j - 1] = -3.4028e+38
+                        attention_mask[0][0][i][j] = -3.4028e+38
 
                 for i in range(prompt_len + query1_len + query2_len, prompt_len + query1_len + query2_len + query3_len):
                     for j in range(prompt_len, prompt_len + query1_len + query2_len):
-                        attention_mask[0][0][i - 1][j - 1] = -3.4028e+38
+                        attention_mask[0][0][i][j] = -3.4028e+38
 
                 if self.layer_idx == 0:
                     print("mask_true!!")

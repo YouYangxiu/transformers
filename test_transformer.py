@@ -36,12 +36,12 @@ q3 = "assistant."
 #
 # text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 
-prompt_len = len(tokenizer(prompt)["input_ids"])
-query1_len = len(tokenizer(q1)["input_ids"])
-query2_len = len(tokenizer(q2)["input_ids"])
-query3_len = len(tokenizer(q3)["input_ids"])
+prompt_len = len(tokenizer(prompt)["input_ids"]) # 1
+query1_len = len(tokenizer(q1)["input_ids"]) # 2
+query2_len = len(tokenizer(q2)["input_ids"])# 2
+query3_len = len(tokenizer(q3)["input_ids"])# 2
 
-# print(f"{prompt_len}, {query1_len}, {query2_len}, {query3_len}")
+print(f"{prompt_len}, {query1_len}, {query2_len}, {query3_len}")
 
 os.environ["text_len"] = str(prompt_len + query1_len + query2_len + query3_len)
 os.environ["query1_len"] = str(query1_len)
