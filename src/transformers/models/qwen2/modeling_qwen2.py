@@ -298,6 +298,8 @@ class Qwen2Attention(nn.Module):
 
         prompt_len = text_len - query1_len - query2_len - query3_len
 
+        mask_first = False
+
         if mask_first:
             # print("mask_true!!")
             if self.first_compute_dict[self.layer_idx]:
