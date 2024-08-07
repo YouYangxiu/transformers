@@ -21,7 +21,7 @@ tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen1.5-1.8B-Chat")
 
 prompt = "Please comment the following essay."
 q1 = """New Year's Day officially begins as soon as people yell "Happy New Year" at midnight. Most people continue partying well after midnight into the wee hours of the first day of the new year. In fact, many New Year's parties include breakfast or brunch. Sometimes at the stroke of midnight there will be fireworks and couples often kiss. One of the most famous New Year's celebrations takes place in New York City's Time Square, where a huge cut crystal ball drops at midnight in front of millions of people standing in the cold. Many more millions watch on television. Some groups, called Polar Bear Clubs, jump into the cold ocean water on New Year's Day as a literal way to start the new year fresh."""
-q1 = ""
+# q1 = ""
 q2 = """The Braille system also had important cultural effects beyond the sphere of written culture. Its invention later led to the development of a music notation system for the blind, although Louis Braille did not develop this system himself (Jimenez, et al., 2009). This development helped remove a cultural obstacle that had been introduced by the popularization of written musical notation in the early 1500s. While music had previously been an arena in which the blind could participate on equal footing, the transition from memory-based performance to notation-based performance meant that blind musicians were no longer able to compete with sighted musicians (Kersten, 1997). As a result, a tactile musical notation system became necessary for professional equality between blind and sighted musicians (Kersten, 1997)."""
 
 messages = [{"role": "user", "content": prompt + q1 + q2}]
