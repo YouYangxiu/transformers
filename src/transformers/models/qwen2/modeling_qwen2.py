@@ -26,7 +26,9 @@ import torch
 import torch.utils.checkpoint
 from torch import nn
 from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
+from transformers.models.cvt.convert_cvt_original_pytorch_checkpoint_to_pytorch import attention
 
+from tensor1 import prompt
 from ...activations import ACT2FN
 from ...cache_utils import Cache, DynamicCache, StaticCache
 from ...modeling_attn_mask_utils import AttentionMaskConverter
@@ -297,19 +299,27 @@ class Qwen2Attention(nn.Module):
         import os
         text_len = int(os.environ.get('text_len'))
         query1_len = int(os.environ.get('query1_len'))
-        query2_len = int(os.environ.get('query1_len'))
+        query2_len = int(os.environ.get('query2_len'))
+        query3_len = int(os.environ.get('query3_len'))
         mask_first = bool(os.environ.get("mask_first", False))
+
+        prompt_len = text_len - query1_len - query2_len - query3_len
 
         if mask_first:
             # print("mask_true!!")
             if self.first_compute_dict[self.layer_idx]:
                 self.first_compute_dict[self.layer_idx] = False
                 # print(f"{self.layer_idx}=====>{attention_mask}")
-                for i in range(0, query2_len):
-                    for j in range(0, query1_len):
-                        attention_mask[0][0][text_len - query2_len + i][text_len - query1_len - query2_len + j] = -3.4028e+38
-            else:
-                attention_mask[0][0][0][text_len - query1_len - query2_len: text_len-query2_len] = -3.4028e+38
+                for i in range(prompt_len + query1_len, prompt_len + query1_len + query2_len):
+                    for j in range(prompt_len, prompt_len + query1_len):
+                        attention_mask[0][0][i][j] = -3.4028e+38
+
+                for i in range(prompt_len + query1_len + query2_len, prompt_len + query1_len + query2_len + query3_len):
+                    for j in range(prompt_len, prompt_len + query1_len + query2_len):
+                        attention_mask[0][0][i][j] = -3.4028e+38
+
+            # else:
+            #     attention_mask[0][0][0][text_len - query1_len - query2_len: text_len-query2_len] = -3.4028e+38
 
 
         # if self.layer_idx == 0:
