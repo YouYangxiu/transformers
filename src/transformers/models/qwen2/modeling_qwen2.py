@@ -301,6 +301,7 @@ class Qwen2Attention(nn.Module):
         mask_first = bool(os.environ.get("mask_first", False))
 
         if mask_first:
+            print("mask_true!!")
             if self.first_compute_dict[self.layer_idx]:
                 self.first_compute_dict[self.layer_idx] = False
                 # print(f"{self.layer_idx}=====>{attention_mask}")
