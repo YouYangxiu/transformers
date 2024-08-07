@@ -398,7 +398,7 @@ class Qwen2FlashAttention2(Qwen2Attention):
         use_cache: bool = False,
         cache_position: Optional[torch.LongTensor] = None,
     ):
-        print(f"this is attention mask from class Qwen2FlashAttention2 {attention_mask}")
+        print(f"this is attention mask from class Qwen2FlashAttention2 {attention_mask.shape}")
         bsz, q_len, _ = hidden_states.size()
 
         query_states = self.q_proj(hidden_states)
