@@ -300,7 +300,7 @@ class Qwen2Attention(nn.Module):
 
 
         if self.layer_idx == 0:
-            print(f"this is attention mask from class Qwen2Attention {attention_mask[:,:]}")
+            print(f"this is attention mask from class Qwen2Attention {attention_mask.shape}")
 
         # if self.first_compute:
 
