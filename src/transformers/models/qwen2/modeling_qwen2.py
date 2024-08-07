@@ -26,9 +26,6 @@ import torch
 import torch.utils.checkpoint
 from torch import nn
 from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
-from transformers.models.cvt.convert_cvt_original_pytorch_checkpoint_to_pytorch import attention
-
-from tensor1 import prompt
 from ...activations import ACT2FN
 from ...cache_utils import Cache, DynamicCache, StaticCache
 from ...modeling_attn_mask_utils import AttentionMaskConverter
