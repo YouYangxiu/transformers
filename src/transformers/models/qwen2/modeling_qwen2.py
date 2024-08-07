@@ -312,8 +312,8 @@ class Qwen2Attention(nn.Module):
                         attention_mask[0][0][i - 1][j - 1] = -3.4028e+38
 
                 if self.layer_idx == 0:
-
-                    print(f"mask={mask_first},this is attention mask from class Qwen2Attention={attention_mask.tolist()}\n")
+                    pass
+                    # print(f"mask={mask_first},this is attention mask from class Qwen2Attention={attention_mask.tolist()}\n")
 
             # else:
             #     attention_mask[0][0][0][text_len - query1_len - query2_len: text_len-query2_len] = -3.4028e+38
