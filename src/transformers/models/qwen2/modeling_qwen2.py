@@ -321,7 +321,7 @@ class Qwen2Attention(nn.Module):
             # else:
             #     attention_mask[0][0][0][text_len - query1_len - query2_len: text_len-query2_len] = -3.4028e+38
 
-        print(attention_mask)
+        # print(attention_mask)
 
 
         # if self.first_compute:
