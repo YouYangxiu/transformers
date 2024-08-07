@@ -46,13 +46,10 @@ from ...utils import (
 )
 from .configuration_qwen2 import Qwen2Config
 
-
 if is_flash_attn_2_available():
     from ...modeling_flash_attention_utils import _flash_attention_forward
 
-
 logger = logging.get_logger(__name__)
-
 
 _CHECKPOINT_FOR_DOC = "Qwen/Qwen2-7B-beta"
 _CONFIG_FOR_DOC = "Qwen2Config"
@@ -60,14 +57,14 @@ _CONFIG_FOR_DOC = "Qwen2Config"
 
 # Copied from transformers.models.llama.modeling_llama._prepare_4d_causal_attention_mask_with_cache_position
 def _prepare_4d_causal_attention_mask_with_cache_position(
-    attention_mask: torch.Tensor,
-    sequence_length: int,
-    target_length: int,
-    dtype: torch.dtype,
-    device: torch.device,
-    min_dtype: float,
-    cache_position: torch.Tensor,
-    batch_size: int,
+        attention_mask: torch.Tensor,
+        sequence_length: int,
+        target_length: int,
+        dtype: torch.dtype,
+        device: torch.device,
+        min_dtype: float,
+        cache_position: torch.Tensor,
+        batch_size: int,
 ):
     """
     Creates a causal 4D mask of shape `(batch_size, 1, query_length, key_value_length)` from a 2D mask of shape
@@ -174,7 +171,7 @@ class Qwen2RotaryEmbedding(nn.Module):
 def rotate_half(x):
     """Rotates half the hidden dims of the input."""
     x1 = x[..., : x.shape[-1] // 2]
-    x2 = x[..., x.shape[-1] // 2 :]
+    x2 = x[..., x.shape[-1] // 2:]
     return torch.cat((-x2, x1), dim=-1)
 
 
@@ -246,7 +243,6 @@ class Qwen2Attention(nn.Module):
         self.config = config
         self.layer_idx = layer_idx
 
-
         if layer_idx is None:
             logger.warning_once(
                 f"Instantiating {self.__class__.__name__} without passing `layer_idx` is not recommended and will "
@@ -280,17 +276,17 @@ class Qwen2Attention(nn.Module):
             base=self.rope_theta,
         )
 
-        self.first_compute_dict = {self.layer_idx:True}
+        self.first_compute_dict = {self.layer_idx: True}
 
     def forward(
-        self,
-        hidden_states: torch.Tensor,
-        attention_mask: Optional[torch.Tensor] = None,
-        position_ids: Optional[torch.LongTensor] = None,
-        past_key_value: Optional[Cache] = None,
-        output_attentions: bool = False,
-        use_cache: bool = False,
-        cache_position: Optional[torch.LongTensor] = None,
+            self,
+            hidden_states: torch.Tensor,
+            attention_mask: Optional[torch.Tensor] = None,
+            position_ids: Optional[torch.LongTensor] = None,
+            past_key_value: Optional[Cache] = None,
+            output_attentions: bool = False,
+            use_cache: bool = False,
+            cache_position: Optional[torch.LongTensor] = None,
     ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
 
         import os
@@ -318,13 +314,10 @@ class Qwen2Attention(nn.Module):
             # else:
             #     attention_mask[0][0][0][text_len - query1_len - query2_len: text_len-query2_len] = -3.4028e+38
 
-
-        # if self.layer_idx == 0:
-        #     print(f"this is attention mask from class Qwen2Attention {attention_mask}")
+        if self.layer_idx == 0 and self.first_compute_dict[self.layer_idx]:
+            print(f"mask={mask_first},this is attention mask from class Qwen2Attention={attention_mask}\n")
 
         # if self.first_compute:
-
-
 
         bsz, q_len, _ = hidden_states.size()
 
@@ -409,14 +402,14 @@ class Qwen2FlashAttention2(Qwen2Attention):
         self._flash_attn_uses_top_left_mask = not is_flash_attn_greater_or_equal_2_10()
 
     def forward(
-        self,
-        hidden_states: torch.Tensor,
-        attention_mask: Optional[torch.Tensor] = None,
-        position_ids: Optional[torch.LongTensor] = None,
-        past_key_value: Optional[Cache] = None,
-        output_attentions: bool = False,
-        use_cache: bool = False,
-        cache_position: Optional[torch.LongTensor] = None,
+            self,
+            hidden_states: torch.Tensor,
+            attention_mask: Optional[torch.Tensor] = None,
+            position_ids: Optional[torch.LongTensor] = None,
+            past_key_value: Optional[Cache] = None,
+            output_attentions: bool = False,
+            use_cache: bool = False,
+            cache_position: Optional[torch.LongTensor] = None,
     ):
         print(f"this is attention mask from class Qwen2FlashAttention2 {attention_mask.shape}")
         bsz, q_len, _ = hidden_states.size()
@@ -452,9 +445,9 @@ class Qwen2FlashAttention2(Qwen2Attention):
             # Activate slicing cache only if the config has a value `sliding_windows` attribute
             cache_has_contents = past_key_value.get_seq_length(self.layer_idx) > 0
             if (
-                getattr(self.config, "sliding_window", None) is not None
-                and kv_seq_len > self.config.sliding_window
-                and cache_has_contents
+                    getattr(self.config, "sliding_window", None) is not None
+                    and kv_seq_len > self.config.sliding_window
+                    and cache_has_contents
             ):
                 slicing_tokens = 1 - self.config.sliding_window
 
@@ -511,9 +504,9 @@ class Qwen2FlashAttention2(Qwen2Attention):
         value_states = value_states.transpose(1, 2)
 
         if (
-            self.config.use_sliding_window
-            and getattr(self.config, "sliding_window", None) is not None
-            and self.layer_idx >= self.config.max_window_layers
+                self.config.use_sliding_window
+                and getattr(self.config, "sliding_window", None) is not None
+                and self.layer_idx >= self.config.max_window_layers
         ):
             sliding_window = self.config.sliding_window
         else:
@@ -551,14 +544,14 @@ class Qwen2SdpaAttention(Qwen2Attention):
 
     # Adapted from Qwen2Attention.forward
     def forward(
-        self,
-        hidden_states: torch.Tensor,
-        attention_mask: Optional[torch.Tensor] = None,
-        position_ids: Optional[torch.LongTensor] = None,
-        past_key_value: Optional[Cache] = None,
-        output_attentions: bool = False,
-        use_cache: bool = False,
-        cache_position: Optional[torch.LongTensor] = None,
+            self,
+            hidden_states: torch.Tensor,
+            attention_mask: Optional[torch.Tensor] = None,
+            position_ids: Optional[torch.LongTensor] = None,
+            past_key_value: Optional[Cache] = None,
+            output_attentions: bool = False,
+            use_cache: bool = False,
+            cache_position: Optional[torch.LongTensor] = None,
     ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
         print(f"this is attention mask from class Qwen2SdpaAttention {attention_mask}")
         if output_attentions:
@@ -657,15 +650,15 @@ class Qwen2DecoderLayer(nn.Module):
         self.post_attention_layernorm = Qwen2RMSNorm(config.hidden_size, eps=config.rms_norm_eps)
 
     def forward(
-        self,
-        hidden_states: torch.Tensor,
-        attention_mask: Optional[torch.Tensor] = None,
-        position_ids: Optional[torch.LongTensor] = None,
-        past_key_value: Optional[Tuple[torch.Tensor]] = None,
-        output_attentions: Optional[bool] = False,
-        use_cache: Optional[bool] = False,
-        cache_position: Optional[torch.LongTensor] = None,
-        **kwargs,
+            self,
+            hidden_states: torch.Tensor,
+            attention_mask: Optional[torch.Tensor] = None,
+            position_ids: Optional[torch.LongTensor] = None,
+            past_key_value: Optional[Tuple[torch.Tensor]] = None,
+            output_attentions: Optional[bool] = False,
+            use_cache: Optional[bool] = False,
+            cache_position: Optional[torch.LongTensor] = None,
+            **kwargs,
     ) -> Tuple[torch.FloatTensor, Optional[Tuple[torch.FloatTensor, torch.FloatTensor]]]:
         """
         Args:
@@ -873,17 +866,17 @@ class Qwen2Model(Qwen2PreTrainedModel):
 
     @add_start_docstrings_to_model_forward(QWEN2_INPUTS_DOCSTRING)
     def forward(
-        self,
-        input_ids: torch.LongTensor = None,
-        attention_mask: Optional[torch.Tensor] = None,
-        position_ids: Optional[torch.LongTensor] = None,
-        past_key_values: Optional[List[torch.FloatTensor]] = None,
-        inputs_embeds: Optional[torch.FloatTensor] = None,
-        use_cache: Optional[bool] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        return_dict: Optional[bool] = None,
-        cache_position: Optional[torch.LongTensor] = None,
+            self,
+            input_ids: torch.LongTensor = None,
+            attention_mask: Optional[torch.Tensor] = None,
+            position_ids: Optional[torch.LongTensor] = None,
+            past_key_values: Optional[List[torch.FloatTensor]] = None,
+            inputs_embeds: Optional[torch.FloatTensor] = None,
+            use_cache: Optional[bool] = None,
+            output_attentions: Optional[bool] = None,
+            output_hidden_states: Optional[bool] = None,
+            return_dict: Optional[bool] = None,
+            cache_position: Optional[torch.LongTensor] = None,
     ) -> Union[Tuple, BaseModelOutputWithPast]:
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         output_hidden_states = (
@@ -991,12 +984,12 @@ class Qwen2Model(Qwen2PreTrainedModel):
 
     # Copied from transformers.models.llama.modeling_llama.LlamaModel._update_causal_mask
     def _update_causal_mask(
-        self,
-        attention_mask: torch.Tensor,
-        input_tensor: torch.Tensor,
-        cache_position: torch.Tensor,
-        past_key_values: Cache,
-        output_attentions: bool,
+            self,
+            attention_mask: torch.Tensor,
+            input_tensor: torch.Tensor,
+            cache_position: torch.Tensor,
+            past_key_values: Cache,
+            output_attentions: bool,
     ):
         # TODO: As of torch==2.2.0, the `attention_mask` passed to the model in `generate` is 2D and of dynamic length even when the static
         # KV cache is used. This is an issue for torch.compile which then recaptures cudagraphs at each decode steps due to the dynamic shapes.
@@ -1017,10 +1010,10 @@ class Qwen2Model(Qwen2PreTrainedModel):
         # When output attentions is True, sdpa implementation's forward method calls the eager implementation's forward
         if self.config._attn_implementation == "sdpa" and not using_static_cache and not output_attentions:
             if AttentionMaskConverter._ignore_causal_mask_sdpa(
-                attention_mask,
-                inputs_embeds=input_tensor,
-                past_key_values_length=past_seen_tokens,
-                is_training=self.training,
+                    attention_mask,
+                    inputs_embeds=input_tensor,
+                    past_key_values_length=past_seen_tokens,
+                    is_training=self.training,
             ):
                 return None
 
@@ -1049,10 +1042,10 @@ class Qwen2Model(Qwen2PreTrainedModel):
         )
 
         if (
-            self.config._attn_implementation == "sdpa"
-            and attention_mask is not None
-            and attention_mask.device.type == "cuda"
-            and not output_attentions
+                self.config._attn_implementation == "sdpa"
+                and attention_mask is not None
+                and attention_mask.device.type == "cuda"
+                and not output_attentions
         ):
             # Attend to all tokens in fully masked rows in the causal_mask, for example the relevant first rows when
             # using left padding. This is required by F.scaled_dot_product_attention memory-efficient attention path.
@@ -1100,18 +1093,18 @@ class Qwen2ForCausalLM(Qwen2PreTrainedModel):
     @add_start_docstrings_to_model_forward(QWEN2_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=CausalLMOutputWithPast, config_class=_CONFIG_FOR_DOC)
     def forward(
-        self,
-        input_ids: torch.LongTensor = None,
-        attention_mask: Optional[torch.Tensor] = None,
-        position_ids: Optional[torch.LongTensor] = None,
-        past_key_values: Optional[List[torch.FloatTensor]] = None,
-        inputs_embeds: Optional[torch.FloatTensor] = None,
-        labels: Optional[torch.LongTensor] = None,
-        use_cache: Optional[bool] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        return_dict: Optional[bool] = None,
-        cache_position: Optional[torch.LongTensor] = None,
+            self,
+            input_ids: torch.LongTensor = None,
+            attention_mask: Optional[torch.Tensor] = None,
+            position_ids: Optional[torch.LongTensor] = None,
+            past_key_values: Optional[List[torch.FloatTensor]] = None,
+            inputs_embeds: Optional[torch.FloatTensor] = None,
+            labels: Optional[torch.LongTensor] = None,
+            use_cache: Optional[bool] = None,
+            output_attentions: Optional[bool] = None,
+            output_hidden_states: Optional[bool] = None,
+            return_dict: Optional[bool] = None,
+            cache_position: Optional[torch.LongTensor] = None,
     ) -> Union[Tuple, CausalLMOutputWithPast]:
         r"""
         Args:
@@ -1192,22 +1185,22 @@ class Qwen2ForCausalLM(Qwen2PreTrainedModel):
 
     # Copied from transformers.models.llama.modeling_llama.LlamaForCausalLM.prepare_inputs_for_generation
     def prepare_inputs_for_generation(
-        self,
-        input_ids,
-        past_key_values=None,
-        attention_mask=None,
-        inputs_embeds=None,
-        cache_position=None,
-        position_ids=None,
-        use_cache=True,
-        **kwargs,
+            self,
+            input_ids,
+            past_key_values=None,
+            attention_mask=None,
+            inputs_embeds=None,
+            cache_position=None,
+            position_ids=None,
+            use_cache=True,
+            **kwargs,
     ):
         # If we have cache: let's slice `input_ids` through `cache_position`, to keep only the unprocessed tokens
         # Exception 1: when passing input_embeds, input_ids may be missing entries
         # Exception 2: some generation methods do special slicing of input_ids, so we don't need to do it here
         if past_key_values is not None:
             if inputs_embeds is not None:  # Exception 1
-                input_ids = input_ids[:, -cache_position.shape[0] :]
+                input_ids = input_ids[:, -cache_position.shape[0]:]
             elif input_ids.shape[1] != cache_position.shape[0]:  # Default case (the "else", a no op, is Exception 2)
                 input_ids = input_ids[:, cache_position]
 
@@ -1216,7 +1209,7 @@ class Qwen2ForCausalLM(Qwen2PreTrainedModel):
             position_ids = attention_mask.long().cumsum(-1) - 1
             position_ids.masked_fill_(attention_mask == 0, 1)
             if past_key_values:
-                position_ids = position_ids[:, -input_ids.shape[1] :]
+                position_ids = position_ids[:, -input_ids.shape[1]:]
 
                 # This `clone` call is needed to avoid recapturing cuda graphs with `torch.compile`'s  `mode="reduce-overhead`, as otherwise the input `position_ids` would have various stride during the decoding. Here, simply using `.contiguous()` is not sufficient as in the batch size = 1 case, `position_ids` is already contiguous but with varying stride which retriggers a capture.
                 position_ids = position_ids.clone(memory_format=torch.contiguous_format)
@@ -1294,17 +1287,17 @@ class Qwen2ForSequenceClassification(Qwen2PreTrainedModel):
 
     @add_start_docstrings_to_model_forward(QWEN2_INPUTS_DOCSTRING)
     def forward(
-        self,
-        input_ids: torch.LongTensor = None,
-        attention_mask: Optional[torch.Tensor] = None,
-        position_ids: Optional[torch.LongTensor] = None,
-        past_key_values: Optional[List[torch.FloatTensor]] = None,
-        inputs_embeds: Optional[torch.FloatTensor] = None,
-        labels: Optional[torch.LongTensor] = None,
-        use_cache: Optional[bool] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        return_dict: Optional[bool] = None,
+            self,
+            input_ids: torch.LongTensor = None,
+            attention_mask: Optional[torch.Tensor] = None,
+            position_ids: Optional[torch.LongTensor] = None,
+            past_key_values: Optional[List[torch.FloatTensor]] = None,
+            inputs_embeds: Optional[torch.FloatTensor] = None,
+            labels: Optional[torch.LongTensor] = None,
+            use_cache: Optional[bool] = None,
+            output_attentions: Optional[bool] = None,
+            output_hidden_states: Optional[bool] = None,
+            return_dict: Optional[bool] = None,
     ) -> Union[Tuple, SequenceClassifierOutputWithPast]:
         r"""
         labels (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
@@ -1417,17 +1410,17 @@ class Qwen2ForTokenClassification(Qwen2PreTrainedModel):
 
     @add_start_docstrings_to_model_forward(QWEN2_INPUTS_DOCSTRING)
     def forward(
-        self,
-        input_ids: Optional[torch.LongTensor] = None,
-        attention_mask: Optional[torch.Tensor] = None,
-        position_ids: Optional[torch.LongTensor] = None,
-        past_key_values: Optional[List[torch.FloatTensor]] = None,
-        inputs_embeds: Optional[torch.FloatTensor] = None,
-        labels: Optional[torch.LongTensor] = None,
-        use_cache: Optional[bool] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        return_dict: Optional[bool] = None,
+            self,
+            input_ids: Optional[torch.LongTensor] = None,
+            attention_mask: Optional[torch.Tensor] = None,
+            position_ids: Optional[torch.LongTensor] = None,
+            past_key_values: Optional[List[torch.FloatTensor]] = None,
+            inputs_embeds: Optional[torch.FloatTensor] = None,
+            labels: Optional[torch.LongTensor] = None,
+            use_cache: Optional[bool] = None,
+            output_attentions: Optional[bool] = None,
+            output_hidden_states: Optional[bool] = None,
+            return_dict: Optional[bool] = None,
     ) -> Union[Tuple, TokenClassifierOutput]:
         r"""
         labels (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
