@@ -309,8 +309,9 @@ class Qwen2Attention(nn.Module):
                     for j in range(0, query1_len):
                         attention_mask[0][0][text_len - query2_len + i][text_len - query1_len - query2_len + j] = -3.4028e+38
 
-        # if self.layer_idx == 0:
-        #     print(f"this is attention mask from class Qwen2Attention {attention_mask.shape}")
+
+        if self.layer_idx == 0:
+            print(f"this is attention mask from class Qwen2Attention {attention_mask}")
 
         # if self.first_compute:
 
