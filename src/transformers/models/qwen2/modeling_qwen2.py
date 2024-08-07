@@ -312,6 +312,7 @@ class Qwen2Attention(nn.Module):
                         attention_mask[0][0][i - 1][j - 1] = -3.4028e+38
 
                 if self.layer_idx == 0:
+                    print("mask_true!!")
                     pass
                     # print(f"mask={mask_first},this is attention mask from class Qwen2Attention={attention_mask.tolist()}\n")
 
