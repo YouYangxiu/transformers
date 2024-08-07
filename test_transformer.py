@@ -16,8 +16,8 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 # 设置只使用 GPU 0
 transformers.logging.set_verbosity_error()
 
-model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen1.5-1.8B-Chat", device_map="auto")
-tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen1.5-1.8B-Chat")
+model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen2-7B-Instruct", device_map="auto")
+tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen2-7B-Instruct")
 
 prompt = "Please summary the following essay(s):"
 q1 = """essay 0: New Year's Day officially begins as soon as people yell "Happy New Year" at midnight. Most people continue partying well after midnight into the wee hours of the first day of the new year. In fact, many New Year's parties include breakfast or brunch. Sometimes at the stroke of midnight there will be fireworks and couples often kiss. One of the most famous New Year's celebrations takes place in New York City's Time Square, where a huge cut crystal ball drops at midnight in front of millions of people standing in the cold. Many more millions watch on television. Some groups, called Polar Bear Clubs, jump into the cold ocean water on New Year's Day as a literal way to start the new year fresh. \n"""
