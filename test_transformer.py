@@ -28,8 +28,12 @@ messages = [{"role": "user", "content": prompt + q1 + q2}]
 text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 
 text_len = len(tokenizer(text)["input_ids"])
-q1_len = len(tokenizer(q1)["input_ids"])
-q2_len = len(tokenizer(q2)["input_ids"])
+query1_len = len(tokenizer(q1)["input_ids"])
+query2_len = len(tokenizer(q2)["input_ids"])
+
+os.environ["text_len"] = str(text_len)
+os.environ["query1_len"] = str(query1_len)
+os.environ["query2_len"] = str(query2_len)
 
 model_inputs = tokenizer([text], return_tensors="pt").to("cuda:0")
 

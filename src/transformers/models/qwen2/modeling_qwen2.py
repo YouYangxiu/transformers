@@ -295,14 +295,18 @@ class Qwen2Attention(nn.Module):
     ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
 
         import os
-        prompt_len = os.environ.get('text_len')
-        query1_len = os.environ.get('query1_len')
-        query2_len = os.environ.get('query1_len')
+        text_len = int(os.environ.get('text_len'))
+        query1_len = int(os.environ.get('query1_len'))
+        query2_len = int(os.environ.get('query1_len'))
 
 
         if self.first_compute_dict[self.layer_idx]:
             self.first_compute_dict[self.layer_idx] = False
-            print(f"{self.layer_idx}=====>{attention_mask}")
+            # print(f"{self.layer_idx}=====>{attention_mask}")
+            for i in range(0, query2_len):
+                for j in range(0, query1_len):
+                    attention_mask[0][0][text_len - query2_len + i][text_len - query1_len - query2_len + j] = -3.4028e+38
+
         # if self.layer_idx == 0:
         #     print(f"this is attention mask from class Qwen2Attention {attention_mask.shape}")
 
