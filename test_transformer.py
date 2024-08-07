@@ -37,7 +37,7 @@ os.environ["query2_len"] = str(query2_len)
 
 model_inputs = tokenizer([text], return_tensors="pt").to("cuda:0")
 
-generated_ids = model.generate(model_inputs.input_ids, max_new_tokens=100, do_sample=False, top_p=None)
+generated_ids = model.generate(model_inputs.input_ids, max_new_tokens=1000, do_sample=False, top_p=None)
 
 generated_ids = [output_ids[len(input_ids):] for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)]
 
