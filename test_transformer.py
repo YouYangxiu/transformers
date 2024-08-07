@@ -24,11 +24,11 @@ tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen2-7B-Instruct")
 # q2 = """essay 1: The Braille system also had important cultural effects beyond the sphere of written culture. Its invention later led to the development of a music notation system for the blind, although Louis Braille did not develop this system himself (Jimenez, et al., 2009). This development helped remove a cultural obstacle that had been introduced by the popularization of written musical notation in the early 1500s. While music had previously been an arena in which the blind could participate on equal footing, the transition from memory-based performance to notation-based performance meant that blind musicians were no longer able to compete with sighted musicians (Kersten, 1997). As a result, a tactile musical notation system became necessary for professional equality between blind and sighted musicians (Kersten, 1997). \n"""
 # q3 = """essay 2: Lennon wrote, or co-wrote some of the most memorable tunes ever written in the Rock 'n' Roll genre. He found great success as a member of the Beatles, which is the most commercially successful group in history, and as a solo artist. Lennon was also a political activist. His views on religion and politics caused a great deal of controversy in the United States. He was an outspoken critic of the country's involvement in the Vietnam conflict. His popularity caused great concern with government officials because he had the attention of the young people in America at the time."""
 
-prompt = "test a"
+prompt = "test "
 
-q1 = "I am"
+q1 = "I am "
 
-q2 = "a helpful"
+q2 = "a helpful "
 
 q3 = "assistant."
 
