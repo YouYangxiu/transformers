@@ -370,6 +370,10 @@ class Qwen2Attention(nn.Module):
 
         # upcast attention to fp32
         attn_weights = nn.functional.softmax(attn_weights, dim=-1, dtype=torch.float32).to(query_states.dtype)
+
+        if self.layer_idx == 0:
+            print(f"{attn_weights.tolist()}")
+
         attn_weights = nn.functional.dropout(attn_weights, p=self.attention_dropout, training=self.training)
         attn_output = torch.matmul(attn_weights, value_states)
 
