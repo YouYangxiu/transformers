@@ -301,7 +301,7 @@ class Qwen2Attention(nn.Module):
 
         prompt_len = text_len - query1_len - query2_len - query3_len
 
-        mask_first = True
+        mask_first = False
 
         if mask_first:
             # print("mask_true!!")
